@@ -1,25 +1,11 @@
 import './Header.css'
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 
 
 const MyComponent = (props: any) => {
-    // const [name, setName] = useState('');
-    
-    // const token = localStorage.getItem('token');
-
-    // useEffect(() => {
-    //     Axios.get('http://localhost:3002/search-name-user',{
-    //         headers: {
-    //             'x-access-token': token,
-    //         },
-    //     })
-    //         .then(response => {
-    //             setName(response.data.nome); // Assuming response.data is the desired name
-    //         })
-    //         .catch(error => {
-    //             console.error('Houve um erro ao buscar os dados do cliente:', error);
-    //         });
-    // }, []);
+  
+    const { user } = useAuth();
 
     return (
         <header className="header d-none d-sm-flex justify-content-center">
@@ -28,7 +14,7 @@ const MyComponent = (props: any) => {
             </h1>
 
             <div id="propsname">
-                <h3 id="name-header">Olá!</h3>
+                <h3 id="name-header">Olá, {user?.name}!</h3>
             </div>
         </header>
     );

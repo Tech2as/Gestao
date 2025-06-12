@@ -1,17 +1,27 @@
 import { useState } from "react";
 import './Nav.css';
 import { Link, useNavigate  } from "react-router-dom";
+import  { useAuth } from "../../contexts/AuthContext";
 
 const Nav = ({
 }: any) => {
-
+  const { user,logout } = useAuth();
+  
     return (
         <aside className="menu-area">
             <nav className="menu">
+
                 <Link to="/home">
                     <i className="fa fa-home"></i> Início
                 </Link>
-
+                
+                {(user?.role === "ADMIN") && (
+                <Link to="/usuarios">
+                    <i className="fa fa-users"></i> Usuários
+                </Link>
+                )}
+                
+                   {(user?.role === "ADMIN" || user?.role === "REGULADOR") && (
                <div className="menu-item">
                <button
                    className="menu-link sinistros-button"
@@ -28,12 +38,13 @@ const Nav = ({
                    </Link>
                  </div>
            </div>
+            )}
 
                     <Link to="/conta">
                         <i className="fa fa-users"></i> Minha Conta
                     </Link>
 
-                <button className="btn btn-link deslogar">
+                <button className="btn btn-link deslogar" onClick={logout}>
                     <i className="fa fa-sign-out" aria-hidden="true"></i> Deslogar
                 </button>
             </nav>
