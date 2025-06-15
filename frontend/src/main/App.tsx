@@ -7,11 +7,11 @@ import { PrivateRoute } from '../routes/PrivateRoute';
 import { useAuth } from "../contexts/AuthContext";
 import type { Role } from "../contexts/AuthContext";
 
-// importa as telas (pages)
+// Páginas do projeto
 import Login from '../pages/Login';
 import Sinistros from '../pages/Sinistros';
 
-//importa o template
+//Template do projeto
 import Home from '../pages/Home';
 import Footer from "../components/template/Footer";
 import Nav from "../components/template/Nav";
