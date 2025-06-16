@@ -21,7 +21,7 @@ const Nav = ({
                 </Link>
                 )}
                 
-                   {(user?.role === "ADMIN" || user?.role === "REGULADOR") && (
+                   {(user?.role === "ADMIN" || user?.role === "REGULADOR" || user?.role === "OFICINA") && (
                <div className="menu-item">
                <button
                    className="menu-link sinistros-button"

@@ -9,7 +9,10 @@ import type { Role } from "../contexts/AuthContext";
 
 // Páginas do projeto
 import Login from '../pages/Login';
+import Cadastro from '../pages/Cadastro';
 import Sinistros from '../pages/Sinistros';
+import Usuarios from '../pages/Usuarios';
+
 
 //Template do projeto
 import Home from '../pages/Home';
@@ -28,22 +31,26 @@ const App = () => {
     <Routes>
       <Route path="/login" element={<Login />} />
 
-      <Route element={<PrivateRoute roles={["ADMIN" as Role]} />}>
+      <Route path="/cadastro" element={<Cadastro />} />
+
+      <Route element={<PrivateRoute roles={["ADMIN", "OFICINA" as Role]} />}>
         <Route path="/home" element={<Home />} />
+      </Route>
+
+       <Route element={<PrivateRoute roles={["ADMIN" as Role]} />}>
+        <Route path="/usuarios" element={<Usuarios />} />
       </Route>
 
       <Route element={<PrivateRoute roles={["OFICINA", "ADMIN" as Role]} />}>
         <Route path="/sinistros" element={<Sinistros />} />
       </Route>
 
-      <Route
-        path="*"
-        element={user ? <Navigate to="/home" replace /> : <Navigate to="/login" replace />}
-      />
+      <Route path="*" element={<Navigate to="/" replace />} />
+
     </Routes>
   );
 
-  if (isLoginPage) {
+  if (isLoginPage || isCadastroPage) {
     return (
       <div className="login-layout">
         <div className="content">

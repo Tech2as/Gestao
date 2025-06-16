@@ -6,7 +6,7 @@ import prisma from "../lib/prisma";
 
 export async function register(req: Request, res: Response): Promise<void> {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password} = req.body;
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
@@ -17,12 +17,12 @@ export async function register(req: Request, res: Response): Promise<void> {
     const hashed = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
-      data: { name, email, password: hashed, role },
+      data: { name, email, password: hashed, active: false},
     });
 
     res.status(201).json({ 
       message: "Usuário criado com sucesso", 
-      user: { id: user.id, name: user.name, role: user.role } 
+      user: { id: user.id, name: user.name } 
     });
   } catch (error) {
     console.error('Erro no registro:', error);
@@ -46,8 +46,13 @@ export async function login(req: Request, res: Response): Promise<void> {
       return;
     }
 
+    if(user.active === false){
+       res.status(401).json({ error: "Aguarde seu login ser efetivado" })
+      return;
+    }
+
     const token = jwt.sign(
-      { id: user.id, role: user.role, name: user.name },
+      { id: user.id, role: user.role?.toUpperCase(), name: user.name },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN }
     );
@@ -57,4 +62,8 @@ export async function login(req: Request, res: Response): Promise<void> {
     console.error('Erro no login:', error);
     res.status(500).json({ error: "Erro interno do servidor" });
   }
+}
+
+export async function authorization(req: Request, res: Response): Promise<void> {
+  res.status(200).json({ message: "pong" });
 }

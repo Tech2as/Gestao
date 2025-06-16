@@ -4,6 +4,8 @@ import { useNavigate, Link } from "react-router-dom";
 import Axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -28,10 +30,23 @@ export default function Login() {
         alert("Login falhou. Verifique suas credenciais.");
         
       }
-    } catch (error) {
-      console.error("Erro ao fazer login:", error);
-      alert("Erro ao se conectar com o servidor.");
+    } catch (error: any) {
+    if (Axios.isAxiosError(error)) {
+      const status = error.response?.status;
+      const message = error.response?.data?.error;
+
+      if (status === 401 && message === "Aguarde seu login ser efetivado") {
+        toast.warning("Seu cadastro ainda não foi ativado. Aguarde a aprovação!");
+      } else if (message) {
+        toast.error(message);
+      } else {
+        toast.error("Erro ao fazer login.");
+      }
+    } else {
+      console.error("Erro inesperado:", error);
+      toast.error("Erro inesperado ao se conectar com o servidor.");
     }
+  }
   };
 
 
@@ -52,6 +67,7 @@ export default function Login() {
   return (
     <div className="login-layout">
       <div className="content">
+        <ToastContainer />
         <h2 className="text-center mb-4">Sistema de Login</h2>
         <Formik
           initialValues={{ email: "", password: "" }}
